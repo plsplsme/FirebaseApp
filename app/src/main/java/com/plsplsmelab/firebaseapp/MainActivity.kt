@@ -31,10 +31,12 @@ class MainActivity : AppCompatActivity() {
         fun getLaunchIntent(from: Context) = Intent(from, MainActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         }
+        const val TAG = "MainActivityLog"
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Log.d(TAG, "onCreate")
 
         configureGoogleSignIn()
         firebaseAuth = FirebaseAuth.getInstance()
@@ -48,6 +50,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    public override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart")
+    }
+
+    public override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume")
+
+        // Check if user is signed in (non-null) and update UI accordingly.
+        val currentUser = firebaseAuth.currentUser
+        val email = currentUser?.email
+        Log.d(TAG, "email " + email)
+        message.text = email
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_SIGN_IN) {
@@ -56,7 +74,7 @@ class MainActivity : AppCompatActivity() {
                 val account = task.getResult(ApiException::class.java)
                 firebaseAuthWithGoogle(account)
             } catch (e: ApiException) {
-                Log.d("MainActivityLog", e.toString())
+                Log.d(TAG, e.toString())
                 e.toString()
                 Toast.makeText(this, "Google sign in failed with api exception:(", Toast.LENGTH_LONG).show()
             }
@@ -79,6 +97,7 @@ class MainActivity : AppCompatActivity() {
     private fun signOut() {
         startActivity(MainActivity.getLaunchIntent(this))
         FirebaseAuth.getInstance().signOut()
+        mGoogleSignInClient.signOut()
     }
 
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount?) {
