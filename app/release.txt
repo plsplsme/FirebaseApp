@@ -1,0 +1,8 @@
+pass: M********
+alias: fire-base-app
+
+SHA-1
+89:65:A1:D9:D0:9A:E1:CC:60:22:90:C0:C1:1B:E3:F4:CB:02:37:AF
+
+SHA-1 Debug
+4E:CA:4E:C7:C5:15:6F:F6:83:AE:C0:33:E9:2F:A5:C9:FA:ED:A7:CB
